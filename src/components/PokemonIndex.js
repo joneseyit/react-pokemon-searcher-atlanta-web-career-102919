@@ -18,7 +18,13 @@ class PokemonPage extends React.Component {
       .then(json => this.setState({ allPokemon: json }))
   }
 
-
+  handleSearchChange = (e, {value} ) => {
+    console.log({value})
+    let searchTerm = {value}[value]
+    this.setState.searchTerm = {value}[value]
+    let newResults = this.state.allPokemon.filter(pokemon => pokemon.name.includes(searchTerm))
+    this.setState({ result: newResults })
+  }
 
   componentDidMount = () => {
     this.fetchPokemon()
@@ -29,9 +35,9 @@ class PokemonPage extends React.Component {
       <div>
         <h1>Pokemon Searcher</h1>
         <br />
-        <Search onSearchChange={_.debounce(() => console.log('🤔'), 500)} showNoResults={false} />
+        <Search onSearchChange={_.debounce(this.handleSearchChange, 500)} showNoResults={true} />
         <br />
-        <PokemonCollection allPokemon={this.state.allPokemon} />
+        <PokemonCollection allPokemon={!this.state.result.length ? this.state.allPokemon : this.state.result } />
         <br />
         <PokemonForm />
       </div>
