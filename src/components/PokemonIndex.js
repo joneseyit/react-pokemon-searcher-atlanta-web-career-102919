@@ -4,7 +4,26 @@ import PokemonForm from './PokemonForm'
 import { Search } from 'semantic-ui-react'
 import _ from 'lodash'
 
+
 class PokemonPage extends React.Component {
+  state = {
+    allPokemon: [],
+    searchTerm: '',
+    result: []
+  }
+
+  fetchPokemon = () => {
+    fetch('http://localhost:3000/pokemon')
+      .then(res => res.json())
+      .then(json => this.setState({ allPokemon: json }))
+  }
+
+
+
+  componentDidMount = () => {
+    this.fetchPokemon()
+  }
+
   render() {
     return (
       <div>
@@ -12,7 +31,7 @@ class PokemonPage extends React.Component {
         <br />
         <Search onSearchChange={_.debounce(() => console.log('🤔'), 500)} showNoResults={false} />
         <br />
-        <PokemonCollection />
+        <PokemonCollection allPokemon={this.state.allPokemon} />
         <br />
         <PokemonForm />
       </div>
